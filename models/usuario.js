@@ -1,4 +1,4 @@
-const { DataTypes, JSON, json }  = require('sequelize');
+const { DataTypes }  = require('sequelize');
 const { db } = require('../database/config');
 
 const Usuario = db.define('Usuarios', {
@@ -32,7 +32,15 @@ const Usuario = db.define('Usuarios', {
     usu_estado: {
         type: DataTypes.BOOLEAN
     }
+    
 });
 
+Usuario.prototype.toJSON = function () {
+    let values = Object.assign({}, this.get());
+    values.uid = values.id
+    delete values.usu_password;
+    delete values.id;
+    return values;
+  }
 
 module.exports = Usuario;

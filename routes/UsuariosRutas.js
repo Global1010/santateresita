@@ -1,10 +1,17 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { validarDatosIn } = require('../middlewares/validarCampos');
+
+const {
+  validarDatosIn,
+  validarJWT,
+  esAdmin, tieneRol
+} = require('../middlewares');
+
+
+
 
 const { usuariosGet,
   usuariosPut,
-  usuarioPatch,
   usuarioDelete,
   usuarioPost } = require('../constrollers/UsuariosControl');
   const { rolValido, Exci, Exmail, ExUSerID } = require('../helpers/dbValidators');
@@ -13,11 +20,13 @@ const router = Router();
 
 router.get('/', usuariosGet);
 
+// actualizar usaurio
 router.put('/:idu',[
   check('id', "Campo no valido!!!").isEmpty(),
   check('idu').custom(ExUSerID),
   validarDatosIn
 ], usuariosPut);
+
 
 router.post('/',
 [
@@ -31,13 +40,14 @@ router.post('/',
   validarDatosIn
 ], usuarioPost);
 
-router.delete('/:xid',[
+// rutas de borrado
+router.delete('/:xid',[ 
+  validarJWT,
+  //esAdmin,
+  tieneRol('ADMIN_ROL','VENTAS_ROL'),
   check('id', "Campo no valido!!!").isEmpty(),
   check('xid').custom(ExUSerID),
   validarDatosIn
 ], usuarioDelete);
-
-router.patch('/', usuarioPatch);
-
 
   module.exports = router;
