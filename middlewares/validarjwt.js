@@ -6,7 +6,7 @@ const validarJWT = async (req = request, res = response, next) => {
 
     const token = req.header('sice-token');
 
-    if (! token) {
+    if (!token) {
         return res.status(401).json({
             msg: 'Token Necesario en la peticion'
         });
@@ -27,13 +27,12 @@ const validarJWT = async (req = request, res = response, next) => {
                 
         if(!usuario.dataValues.usu_estado ) {
            return res.status(400).json({
-           msg: 'usuario no autorizado---------'
+           msg: 'usuario no autorizado'
         });
     }
 
        req.usuario = usuario;
    
-
         next();
     } catch (error) {
         //console.log(error);

@@ -7,21 +7,17 @@ const usuariosGet = async (req= request , res = response) => {
     //const {q, nombre = 'Sin Datos', apikey,page=1, limit=10 } = req.query;
     const {limite = 10, desde= 0 } = req.query;
     
-    const query = {where: {  usu_estado: 1} };
+    const query = {where: {  usu_estado: 0} };
 
     const [total, usuarios] = await Promise.all([
-        Usuario.count(query ),
-        Usuario.findAll(query,
-            {  limit: Number(limite), 
-                offset: Number(desde)
-            },
-        )
+       Usuario.count({limit: Number(limite),query}),
+       Usuario.findAll({limit: Number(limite),offset: Number(desde)}, query)
     ]);
 
     res.json({
-        total, usuarios
+       total, usuarios
     });
-  }
+}
 
   // Crear Usuarios
 const usuarioPost = async (req, res = response) => {

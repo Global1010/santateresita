@@ -3,18 +3,15 @@ const { check } = require('express-validator');
 
 const {
   validarDatosIn,
-  validarJWT,
-  esAdmin, tieneRol
+  tieneRol
 } = require('../middlewares');
-
-
-
 
 const { usuariosGet,
   usuariosPut,
   usuarioDelete,
   usuarioPost } = require('../constrollers/UsuariosControl');
   const { rolValido, Exci, Exmail, ExUSerID } = require('../helpers/dbValidators');
+const { validarJWT } = require('../middlewares/validarjwt');
   
 const router = Router();
 
@@ -33,9 +30,7 @@ router.post('/',
   check('usu_nombre', 'El Nombre es Necesario').not().isEmpty(),
   check('usu_ci', 'El Nro. de la Cedula es Necesario').not().isEmpty(),
   check('usu_password', 'La Contraseña es necesario y debe de ser mas de 6 letras').isLength({ min: 6 }),
-  check('usu_email', 'el correo no es válido').isEmail(),
   check('usu_ci').custom( Exci ),
-  check('usu_email').custom( Exmail ),
   check('usu_cargo').custom( rolValido),
   validarDatosIn
 ], usuarioPost);
